@@ -1,0 +1,77 @@
+---
+  test_name: Post an article without authenticating.
+  stages:
+  - name: Posting an article without authenticating
+    request:
+      url: http://localhost/article
+      json:
+        title: web back end
+        content: This is the body of article1
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+---
+
+  test_name: try to post an article with wrong password.
+  stages:
+  - name: Password is incorrect.
+    request:
+      url: http://localhost/article
+      method: POST
+      auth:
+        - Shekhar__
+        - xyz
+
+      json:
+        title: web back end
+        content: This is the body of article
+      headers:
+          content-type: application/json
+    response:
+        status_code: 403
+---
+  test_name: make sure article is posted successfully
+  stages:
+  - name: New article posted.
+    request:
+      url: http://localhost/article
+      method: POST
+      auth:
+        - Shekhar__
+        - ab
+      json:
+        title: web back end1111111
+        content: This is the body of article
+      headers:
+          content-type: application/json
+    response:
+      status_code: 201
+
+---
+  test_name: retrieve the newly posted article.
+
+  stages:
+    - name: Retrieved the article.
+      request:
+        url: http://localhost/article?limit=1
+        auth:
+          - Shekhar__
+          - ab
+
+        method: GET
+      response:
+        status_code: 200
+
+---
+  test_name: check that the newly posted article is the most recent.
+  stages:
+    - name: Check recent article.
+      request:
+        url: http://localhost/article
+        method: GET
+        headers:
+          content-type: application/json
+      response:
+        status_code: 200

@@ -1,0 +1,90 @@
+---
+  test_name: Add an article with a new tag
+
+  stages:
+    - name: Adding an article with a new tag
+      request:
+        url: http://localhost/tags
+        json:
+          article_id: 2
+          tag_name: '#csuf101'
+        method: POST
+        auth:
+          - Shekhar__
+          - ab
+
+        headers:
+          content-type: application/json
+      response:
+        status_code: 201
+---
+
+  test_name: List all articles with the new tag
+
+  stages:
+    - name: the list of article should be returned
+      request:
+        url: 'http://localhost/tags?tag=%23csuf101'
+        method: GET
+      response:
+        status_code: 200
+
+---
+
+  test_name: Add another tag to the article
+
+  stages:
+    - name: Add another tag to the article
+      request:
+         url: http://localhost/tags
+         method: PUT
+         auth:
+           - Shekhar__
+           - ab
+
+         json:
+           article_id: 2
+           tags: ["#orange1","#fullerton1"]
+         headers:
+           content-type: application/json
+      response:
+        status_code: 201
+
+---
+
+    test_name: Delete one of the tags from the article
+    stages:
+      - name: delete the tags related to article
+        request:
+          url: http://localhost/tags
+          method: DELETE
+          auth:
+            - Shekhar__
+            - ab
+
+          json:
+            article_id: 2
+            tag_name: '#csuf101'
+          headers:
+            content-type: application/json
+        response:
+          status_code: 200
+
+---
+  test_name: Add a tag to an article that doesn’t exist
+  stages:
+    - name: delete tags of article that does not exists
+      request:
+        url: http://localhost/tags
+        method: DELETE
+        auth:
+          - Shekhar__
+          - ab
+
+        json:
+          article_id: 79
+          tag_name: '#testHashtag1'
+        headers:
+          content-type: application/json
+      response:
+        status_code: 409

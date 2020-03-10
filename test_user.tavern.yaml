@@ -1,0 +1,94 @@
+---
+
+test_name: Create a user.
+
+stages:
+  - name: Make sure that new user has unique emailID than ones in the database
+
+    request:
+      url: http://localhost/user
+      json:
+        user_name: shekharpalit
+        hashed_password: shekhar1
+        full_name: shekhar palit
+        email_id: shekhar@csu.fullerton.edu
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+  test_name: update a user's hashed_password
+
+  stages:
+    - name: update a user hashed_password
+      request:
+          url: http://localhost/user
+          json:
+            hashed_password: alice1
+          method: PATCH
+          auth:
+              - shekharpalit
+              - shekhar1
+
+          headers:
+            content-type: application/json
+      response:
+          status_code: 201
+
+
+---
+
+test_name: Try to change the password for a user that does not exist
+
+stages:
+  - name: Make sure that the user exits in the database for which the password is to be updated/ changed
+    request:
+      url: http://localhost/user
+      auth:
+        - mk
+        - mk
+      json:
+        hashed_password: mynewpass
+      method: PATCH
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Delete the user
+
+stages:
+  - name: Make sure that the user to be deleted exists in the database
+    request:
+      url: http://localhost/user
+      auth:
+        - shekharpalit
+        - alice1
+      method: DELETE
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+---
+
+test_name: Try to change the password for the deleted user
+
+stages:
+  - name: Make sure that the deleted user's password cannot be updated/changed
+    request:
+        url: http://localhost/user
+        auth:
+          - shekharpalit
+          - shekhar1
+        json:
+          hashed_password: alice1
+        method: PATCH
+        headers:
+          content-type: application/json
+    response:
+      status_code: 401
