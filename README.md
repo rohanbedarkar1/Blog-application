@@ -20,7 +20,6 @@ There are 4 microservies, each having appropriate JSON data formats, HTTP method
 ## Team Members
 - Shekhar Palit
 - Rohan Bedarkar
-- Shruti Taware
 ## Project Technologies
 - Programming Language - Python
 - Web Frame Work - Flask
